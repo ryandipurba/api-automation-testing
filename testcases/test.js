@@ -1,14 +1,17 @@
 const chai = require("chai");
 const expect = chai.expect;
 const api = require("../api/fazztrackApi");
-const scenarioCreateUser = require("../scenarios/createUser");
+// const scenarioCreateUser = require("../scenarios/createUser");
 const scenarioGetUserById = require("../scenarios/getUserById");
 const scenarioUpdateUser = require("../scenarios/updateUser");
 const requestBody = require("../data/create-user.json");
+const getUserIdSchema = require("../schemas/getUserIdSchema.json");
+const updateSchema = require("../schemas/updateSchema.json");
 
 //urutan matters
 chai.use(require("chai-like"));
 chai.use(require("chai-things"));
+chai.use(require("chai-json-schema"));
 
 // MOCHA FRAMEWORK TEST
 
@@ -16,14 +19,12 @@ chai.use(require("chai-things"));
 describe(`${scenarioGetUserById.testcaseGetUserById.description}`, async () => {
   let id = "";
   before(async () => {
-    console.log("before hooks");
     let response = await api.postUser(requestBody);
     id = response.body.id;
     expect(response.status).to.equal(200);
   });
 
   afterEach(async () => {
-    console.log("after each hooks");
     response = await api.deleteUser(id);
   });
 
@@ -35,6 +36,7 @@ describe(`${scenarioGetUserById.testcaseGetUserById.description}`, async () => {
     expect(response.status).to.equal(200);
     expect(bodyData.firstName).to.equal(nama);
     expect(bodyData.id).to.equal(id);
+    expect(response.body).has.jsonSchema(getUserIdSchema);
   });
 
   it(`${scenarioGetUserById.testcaseGetUserById.negative.case1}`, async () => {
@@ -51,7 +53,6 @@ describe(`${scenarioUpdateUser.testcaseUpdateUser.description}`, async () => {
   let id = "";
   let bodyData;
   beforeEach(async () => {
-    console.log("before hooks");
     let response = await api.postUser(requestBody);
     id = response.body.id;
     bodyData = response.body;
@@ -59,7 +60,6 @@ describe(`${scenarioUpdateUser.testcaseUpdateUser.description}`, async () => {
   });
 
   afterEach(async () => {
-    console.log("after each hooks");
     response = await api.deleteUser(id);
   });
 
@@ -71,6 +71,7 @@ describe(`${scenarioUpdateUser.testcaseUpdateUser.description}`, async () => {
     expect(response.status).to.equal(200);
     expect(response.body.occupation).to.equal("guru");
     expect(response.body.nationality).to.equal("inggris");
+    expect(response.body).has.jsonSchema(updateSchema);
   });
 
   it(`${scenarioUpdateUser.testcaseUpdateUser.negative.case1}`, async () => {

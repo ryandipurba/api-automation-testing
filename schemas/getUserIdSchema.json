@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": [
+    "id",
+    "firstName",
+    "lastName",
+    "age",
+    "occupation",
+    "nationality",
+    "hobbies",
+    "gender",
+    "createdDate",
+    "updatedDate"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "default": "",
+      "title": "The id Schema",
+      "examples": ["1c86e5ba-e201-4659-95c3-3b5e171c982d"]
+    },
+    "firstName": {
+      "type": "string",
+      "default": "",
+      "title": "The firstName Schema",
+      "examples": ["Ryandi"]
+    },
+    "lastName": {
+      "type": "string",
+      "default": "",
+      "title": "The lastName Schema",
+      "examples": ["Purba"]
+    },
+    "age": {
+      "type": "integer",
+      "default": 0,
+      "title": "The age Schema",
+      "examples": [24]
+    },
+    "occupation": {
+      "type": "string",
+      "default": "",
+      "title": "The occupation Schema",
+      "examples": ["QA Engineer"]
+    },
+    "nationality": {
+      "type": "string",
+      "default": "",
+      "title": "The nationality Schema",
+      "examples": ["Indonesia"]
+    },
+    "hobbies": {
+      "type": "array",
+      "default": [],
+      "title": "The hobbies Schema",
+      "items": {
+        "type": "string",
+        "default": "",
+        "title": "A Schema",
+        "examples": ["Riding"]
+      },
+      "examples": [["Riding"]]
+    },
+    "gender": {
+      "type": "string",
+      "default": "",
+      "title": "The gender Schema",
+      "examples": ["MALE"]
+    },
+    "createdDate": {
+      "type": "string",
+      "default": "",
+      "title": "The createdDate Schema",
+      "examples": ["2022-08-12T23:47:47.759"]
+    },
+    "updatedDate": {
+      "type": "null",
+      "default": null,
+      "title": "The updatedDate Schema",
+      "examples": [null]
+    }
+  },
+  "examples": [
+    {
+      "id": "1c86e5ba-e201-4659-95c3-3b5e171c982d",
+      "firstName": "Ryandi",
+      "lastName": "Purba",
+      "age": 24,
+      "occupation": "QA Engineer",
+      "nationality": "Indonesia",
+      "hobbies": ["Riding"],
+      "gender": "MALE",
+      "createdDate": "2022-08-12T23:47:47.759",
+      "updatedDate": null
+    }
+  ]
+}
