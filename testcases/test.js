@@ -12,50 +12,33 @@ chai.use(require("chai-things"));
 
 // MOCHA FRAMEWORK TEST
 
-// create user
-// describe(`${scenarioCreateUser.testcaseCreateUser.description}`, async () => {
-//   it(`${scenarioCreateUser.testcaseCreateUser.positive.case1}`, async () => {
-//     let nama = requestBody.firstName;
-//     let response = await api.postUser(requestBody);
-//     let bodyData = response.body;
-
-//     expect(response.status).to.equal(200);
-//     expect(bodyData.firstName).to.equal(nama);
-//     expect(bodyData.id).not.to.be.null;
-
-//     // Additional Assertion
-//     response = await api.getUser(nama);
-//     bodyData = response.body;
-//     expect(response.status).to.equal(200);
-
-//     for (let index = 0; index < bodyData.data.length; index += 1) {
-//       expect(bodyData.data[index].firstName.toLowerCase()).to.equal(
-//         nama.toLowerCase()
-//       );
-//     }
-//   });
-// });
-
 // Get User By Id
 describe(`${scenarioGetUserById.testcaseGetUserById.description}`, async () => {
+  let id = "";
+  before(async () => {
+    console.log("before hooks");
+    let response = await api.postUser(requestBody);
+    id = response.body.id;
+    expect(response.status).to.equal(200);
+  });
+
+  afterEach(async () => {
+    console.log("after each hooks");
+    response = await api.deleteUser(id);
+  });
+
   it(`${scenarioGetUserById.testcaseGetUserById.positive.case1}`, async () => {
     let nama = requestBody.firstName;
-    let response = await api.postUser(requestBody);
+    response = await api.getUserById(id);
     let bodyData = response.body;
-    response = await api.getUserById(bodyData.id);
 
     expect(response.status).to.equal(200);
     expect(bodyData.firstName).to.equal(nama);
-    expect(bodyData.id).to.equal(bodyData.id);
-
-    // delete data
-    response = await api.deleteUser(bodyData.id);
-
-    console.log(bodyData);
+    expect(bodyData.id).to.equal(id);
   });
 
   it(`${scenarioGetUserById.testcaseGetUserById.negative.case1}`, async () => {
-    let id = requestBody.id;
+    id = requestBody.id;
     let response = await api.getUserById(id);
 
     expect(response.status).to.equal(400);
@@ -65,9 +48,22 @@ describe(`${scenarioGetUserById.testcaseGetUserById.description}`, async () => {
 
 // Update User
 describe(`${scenarioUpdateUser.testcaseUpdateUser.description}`, async () => {
-  it(`${scenarioUpdateUser.testcaseUpdateUser.positive.case1}`, async () => {
+  let id = "";
+  let bodyData;
+  beforeEach(async () => {
+    console.log("before hooks");
     let response = await api.postUser(requestBody);
-    let bodyData = response.body;
+    id = response.body.id;
+    bodyData = response.body;
+    expect(response.status).to.equal(200);
+  });
+
+  afterEach(async () => {
+    console.log("after each hooks");
+    response = await api.deleteUser(id);
+  });
+
+  it(`${scenarioUpdateUser.testcaseUpdateUser.positive.case1}`, async () => {
     bodyData.occupation = "guru";
     bodyData.nationality = "inggris";
     response = await api.updateUser(bodyData);
@@ -75,45 +71,29 @@ describe(`${scenarioUpdateUser.testcaseUpdateUser.description}`, async () => {
     expect(response.status).to.equal(200);
     expect(response.body.occupation).to.equal("guru");
     expect(response.body.nationality).to.equal("inggris");
-    // delete data
-    response = await api.deleteUser(bodyData.id);
   });
 
   it(`${scenarioUpdateUser.testcaseUpdateUser.negative.case1}`, async () => {
-    let response = await api.postUser(requestBody);
-    let bodyData = response.body;
     bodyData.age = 0;
     response = await api.updateUser(bodyData);
 
     expect(response.status).to.equal(400);
     expect(response.body.errorCode).to.equal("ER-03");
-
-    // delete data
-    response = await api.deleteUser(bodyData.id);
   });
 
   it(`${scenarioUpdateUser.testcaseUpdateUser.negative.case2}`, async () => {
-    let response = await api.postUser(requestBody);
-    let bodyData = response.body;
     bodyData.hobbies = [];
     response = await api.updateUser(bodyData);
 
     expect(response.status).to.equal(400);
     expect(response.body.errorCode).to.equal("ER-03");
-    // delete data
-    response = await api.deleteUser(bodyData.id);
   });
 
   it(`${scenarioUpdateUser.testcaseUpdateUser.negative.case3}`, async () => {
-    let response = await api.postUser(requestBody);
-    let bodyData = response.body;
-    bodyData.id = "";
+    bodyData.id = null;
     response = await api.updateUser(bodyData);
 
     expect(response.status).to.equal(404);
     expect(response.body.errorCode).to.equal("ER-01");
-
-    // delete data
-    response = await api.deleteUser(bodyData.id);
   });
 });
